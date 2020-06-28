@@ -1,0 +1,124 @@
+var list1 = [{
+    id: "ab",
+    children: [{
+            id: "cd", 
+            children: [{
+                    id: "ef",
+                    children: []
+            }]
+    },{
+                    id: "fg",
+                    children: []
+            }]
+    },{
+    id: "ac",
+    children: [{
+            id: "ce", 
+            children: [{
+                    id: "eg",
+                    children: []
+            }]
+    }]
+}]
+ function test(list, str) {
+        var result = [];
+        var s = [];
+        var b = [];
+        var its = [];
+        var c;
+        var concat  = false;
+        function each(data) {
+            let iterator = data[Symbol.iterator]();             
+            its.push(iterator);
+            let item = {done: false};
+            while(!item.done){
+
+                item = iterator.next();
+                var len = (its.indexOf(iterator));
+                if(len < its.length - 1) {
+                    its = its.slice(0, len + 1);
+                    c = s[s.length -1].slice(0, len);
+                    concat = true
+                    
+                }
+                if(c && b.length && concat) {
+                    b = c.concat(b)
+                    concat = false;
+                }
+                
+                if (!item.done) {
+                    if(item.value) {
+                        b.push(item.value.id);
+                        each(item.value['children'])
+
+                    }
+                    
+                } else {
+                    if(b.length) {
+                        console.log(b);
+                        
+                        s.push(b);
+                        b = [];
+                    }
+                    
+                }
+            }
+        }
+        each(list);
+        s.forEach(function(item) {
+            var index  = item.indexOf(str)
+            if(index != -1) {
+                result.push(item.slice(0,index+1).reverse().join())
+            }
+        })
+        console.log(result);
+        return result;
+    }
+        
+//     test(list1, 'fg');
+
+var locationList = [
+{ id: 0, name: "中国" },
+{ id: 1, pid: 0, name: "广东省" },
+{ id: 2, pid: 1, name: "深圳市" },
+{ id: 3, pid: 1, name: "广州市" },
+{id:4, pid:0, name: '山西省'},
+{id:5, pid: 4, name: '忻州市'},
+{id:6, pid: 5, name: 'XX县'}
+]
+ function tree(list){
+    let temp = {};
+    let tree = {};
+    for(let i in list){
+        temp[list[i].id] = list[i];
+    }
+    for(let i in temp){
+        if(temp[i].pid) {
+            if(!temp[temp[i].pid].children) {
+                temp[temp[i].pid].children = new Object();
+            }
+            temp[temp[i].pid].children[temp[i].id] = temp[i];
+        } else {
+            tree[temp[i].id] = temp[i];
+        }
+    }
+console.log(tree);
+    return tree;
+}
+tree(locationList)
+    function sort(arr) {
+    let arrL = arr.length;
+    let minIndex, c;
+    for (let i = 0; i < len - 1; i++) {
+        minIndex = i;
+        for (var j = i + 1; j < len; j++) {
+            if (arr[j].timestamp < arr[minIndex].timestamp) {     
+                minIndex = j;                 
+            }
+        }
+        c = arr[i].timestamp;
+        arr[i].timestamp = arr[minIndex].timestamp;
+        arr[minIndex].timestamp = c.timestamp;
+    }
+        return arr;
+    }
